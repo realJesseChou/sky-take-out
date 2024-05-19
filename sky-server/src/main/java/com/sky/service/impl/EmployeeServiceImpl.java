@@ -9,9 +9,11 @@ import com.sky.context.BaseContext;
 import com.sky.dto.EmployeeDTO;
 import com.sky.dto.EmployeeLoginDTO;
 import com.sky.dto.EmployeePageQueryDTO;
+import com.sky.dto.PasswordEditDTO;
 import com.sky.entity.Employee;
 import com.sky.exception.AccountLockedException;
 import com.sky.exception.AccountNotFoundException;
+import com.sky.exception.PasswordEditFailedException;
 import com.sky.exception.PasswordErrorException;
 import com.sky.mapper.EmployeeMapper;
 import com.sky.result.PageResult;
@@ -65,6 +67,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employee;
     }
 
+    /**
+     * 新增员工信息
+     *
+     * @param employeeDTO
+     */
     @Override
     public void save(EmployeeDTO employeeDTO) {
         Employee employee = new Employee();
@@ -89,6 +96,61 @@ public class EmployeeServiceImpl implements EmployeeService {
         pageResult.setTotal(pages.getTotal());
         pageResult.setRecords(pages.getResult());
         return pageResult;
+    }
+
+    @Override
+    public void startOrStop(Integer status, Long id) {
+        Employee employee = Employee.builder()
+                .id(id)
+                .status(status)
+                .build();
+        employeeMapper.update(employee);
+    }
+
+    @Override
+    public Employee getById(Long id) {
+        Employee employee = employeeMapper.getById(id);
+        employee.setPassword("***********");
+        return employee;
+    }
+
+    /**
+     * 修改员工信息
+     *
+     * @param employeeDTO
+     */
+    @Override
+    public void update(EmployeeDTO employeeDTO) {
+        Employee employee = new Employee();
+        BeanUtils.copyProperties(employeeDTO, employee);
+        employee.setUpdateTime(LocalDateTime.now());
+        employee.setUpdateUser(BaseContext.getCurrentId());     // 使用BaseContext获取当前登录用户的id
+        employeeMapper.update(employee);
+    }
+
+    @Override
+    public void editPassword(PasswordEditDTO passwordEditDTO) {
+        // 获取要修改的员工信息
+        Employee employee = employeeMapper.getById(passwordEditDTO.getEmpId());
+        Long updateId = BaseContext.getCurrentId();
+        employee.setUpdateTime(LocalDateTime.now());
+        employee.setUpdateUser(updateId);
+        // 判断是否是当前登录用户，只有是当前用户才能修改密码
+        if(updateId.equals(employee.getId())){
+            // 对前端密码进行md5加密
+            String oldPassword = DigestUtils.md5DigestAsHex(passwordEditDTO.getOldPassword().getBytes());
+            if (!oldPassword.equals(employee.getPassword())) {
+                // 如果旧密码输入不正确，抛出异常
+                throw new PasswordEditFailedException("原" + MessageConstant.PASSWORD_ERROR);
+            }
+            // 对前端密码进行md5加密
+            String newPassword = DigestUtils.md5DigestAsHex(passwordEditDTO.getNewPassword().getBytes());
+            employee.setPassword(newPassword);
+            // 修改密码
+            employeeMapper.update(employee);
+        }else {
+            throw new PasswordEditFailedException("只能修改自己的密码");
+        }
     }
 
 }
