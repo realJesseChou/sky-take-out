@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 public class AutoFillAspect {
     /**
      * 切入点
+     * 在mapper包下的所有类所有方法中加了@AutoFill注解的方法上切入
      * */
     @Pointcut("execution(* com.sky.mapper.*.*(..)) && @annotation(com.sky.annotation.AutoFill)")
     public void autoFillPointCut(){}
