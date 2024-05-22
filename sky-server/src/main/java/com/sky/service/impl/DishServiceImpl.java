@@ -14,6 +14,7 @@ import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealDishMapper;
 import com.sky.result.PageResult;
+import com.sky.result.Result;
 import com.sky.service.DishService;
 import com.sky.vo.DishVO;
 import io.jsonwebtoken.Claims;
@@ -153,5 +154,27 @@ public class DishServiceImpl implements DishService {
         dishMapper.update(dish);
     }
 
+    /**
+     * 根据分类id查询菜品
+     * @param categoryId
+     * @return
+     */
+    @Override
+    public List<Dish> getByCategoryId(Long categoryId) {
+        // 1.根据分类id查询菜品
+        return dishMapper.getByCategoryId(categoryId);
+    }
+
+    /**
+     * 设置菜品起停售
+     * @param status
+     * @param id
+     */
+    @Override
+    public void setOnSale(Integer status, Long id) {
+        // 1.设置菜品的状态
+        Dish dish = Dish.builder().id(id).status(status).build();
+        dishMapper.setOnSale(dish);
+    }
 
 }
