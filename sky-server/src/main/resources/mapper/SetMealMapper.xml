@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.mapper.SetMealMapper">
+    <!--    使用insert生成的主键值，并返回，因为菜品口味的插入需要这个数据-->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO setmeal(name, category_id, price, image, description, status, create_time, update_time, create_user, update_user)
+        VALUES(#{name}, #{categoryId}, #{price}, #{image}, #{description}, #{status}, #{createTime}, #{updateTime}, #{createUser}, #{updateUser})
+    </insert>
+
+    <select id="pageQuery" resultType="com.sky.vo.SetmealVO">
+        select sm.*, c.name as categoryName from setmeal sm left join category c on sm.category_id = c.id
+        <where>
+            <if test="name != null and name != ''">
+                and sm.name like concat("%", #{name}, "%")
+            </if>
+            <if test="categoryId != null">
+                and sm.category_id = #{categoryId}
+            </if>
+            <if test="status != null">
+                and sm.status = #{status}
+            </if>
+        </where>
+        order by sm.create_time desc
+    </select>
+
+    <delete id="deleteBatch">
+        delete from setmeal where id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="update" useGeneratedKeys="true" keyProperty="id">
+        update setmeal
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="categoryId != null">
+                category_id = #{categoryId},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="image != null and image != ''">
+                image = #{image},
+            </if>
+            <if test="description != null and description != ''">
+                description = #{description},
+            </if>
+            update_time = #{updateTime},
+            update_user = #{updateUser}
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>

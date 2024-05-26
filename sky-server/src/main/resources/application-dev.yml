@@ -13,3 +13,9 @@ sky:
     access-key-secret: 1Grc3sb9i0JmLiXIP75PmhFg81XcQ6
     bucket-name: jesse-sky-take-out
 
+  redis:
+    host: localhost
+    port: 6379
+    password: 123456
+    database: 0
+
