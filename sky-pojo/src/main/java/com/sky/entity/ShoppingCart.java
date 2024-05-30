@@ -10,7 +10,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
- * 购物车
+ * 购物车记录并非购物车
+ * 指的是在购物车中的一条商品的记录
  */
 @Data
 @Builder
@@ -22,7 +23,7 @@ public class ShoppingCart implements Serializable {
 
     private Long id;
 
-    //名称
+    //名称jj
     private String name;
 
     //用户id
@@ -40,10 +41,10 @@ public class ShoppingCart implements Serializable {
     //数量
     private Integer number;
 
-    //金额
+    //金额jj
     private BigDecimal amount;
 
-    //图片
+    //图片jj
     private String image;
 
     private LocalDateTime createTime;
