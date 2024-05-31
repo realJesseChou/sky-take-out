@@ -10,4 +10,14 @@
             (#{od.name}, #{od.image}, #{od.orderId}, #{od.dishId}, #{od.setmealId}, #{od.dishFlavor}, #{od.number}, #{od.amount})
         </foreach>
     </insert>
+
+    <select id="getByOrder" resultType="com.sky.entity.OrderDetail">
+        select * from order_detail
+        <where>
+            <if test="id != null">
+                and order_id = #{id}
+            </if>
+
+        </where>
+    </select>
 </mapper>

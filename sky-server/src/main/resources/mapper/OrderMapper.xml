@@ -39,5 +39,17 @@
         where id = #{id}
     </update>
 
+    <select id="page" resultType="com.sky.entity.Orders">
+        select * from orders
+        <where>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+        </where>
+        order by order_time desc
+    </select>
 
 </mapper>
