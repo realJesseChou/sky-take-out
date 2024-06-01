@@ -1,5 +1,6 @@
 package com.sky.controller.user;
 
+import com.sky.context.BaseContext;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
@@ -51,9 +52,11 @@ public class OrderController {
      * @return
      */
     @GetMapping("/historyOrders")
-    @ApiOperation("用户历史订单查询")
+    @ApiOperation("客户端历史订单查询")
     public Result<PageResult> page(OrdersPageQueryDTO ordersPageQueryDTO) {
-        log.info("用户历史订单查询");
+        log.info("客户端历史订单查询");
+        // 设置userId(注意，这里将来与管理端公用page方法，因此user_id需要在controller层就设置好，而不能在service层设置)
+        ordersPageQueryDTO.setUserId(BaseContext.getCurrentId());
         PageResult pageResult = orderService.page(ordersPageQueryDTO);
         return Result.success(pageResult);
     }

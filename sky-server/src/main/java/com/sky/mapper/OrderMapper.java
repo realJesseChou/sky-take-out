@@ -45,4 +45,12 @@ public interface OrderMapper {
     Orders getById(Long id);
 
 
+    /**
+     * 根据订单状态查询订单数量
+     * @param toBeConfirmed
+     * @return
+     */
+    Integer countByStatus(Integer toBeConfirmed);
+
+
 }
