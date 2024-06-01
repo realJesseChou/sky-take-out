@@ -82,4 +82,10 @@ public interface OrderService {
      * @param id
      */
     void completeOrder(Long id);
+
+    /**
+     * 提醒商家接单
+     * @param id
+     */
+    void remindOrder(Long id);
 }

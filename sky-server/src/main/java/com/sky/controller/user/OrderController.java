@@ -97,4 +97,14 @@ public class OrderController {
         orderService.BuyAgain(id);
         return Result.success();
     }
+
+
+    @GetMapping("/reminder/{id}")
+    @ApiOperation("提醒商家接单")
+    public Result remindOrder(@PathVariable("id") Long id){
+        log.info("提醒商家接单:{}",id);
+        orderService.remindOrder(id);
+        return Result.success();
+    }
+
 }
