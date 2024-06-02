@@ -354,13 +354,13 @@ public class OrderServiceImpl implements OrderService {
         Integer payStatus = orders.getPayStatus();
         if(payStatus.equals(Orders.PAID)){
             // 调用退款接口
-            String refund =  weChatPayUtil.refund(
-                    orders.getNumber(),                 // 商户订单号
-                    orders.getNumber(),                 // 商户退款单号
-                    BigDecimal.valueOf(orders.getAmount().doubleValue()),   // 退款金额
-                    BigDecimal.valueOf(orders.getAmount().doubleValue())    // 原订单金额
-            );
-            log.info("申请退款：{}", refund);
+//            String refund =  weChatPayUtil.refund(
+//                    orders.getNumber(),                 // 商户订单号
+//                    orders.getNumber(),                 // 商户退款单号
+//                    BigDecimal.valueOf(orders.getAmount().doubleValue()),   // 退款金额
+//                    BigDecimal.valueOf(orders.getAmount().doubleValue())    // 原订单金额
+//            );
+//            log.info("申请退款：{}", refund);
             orders.setPayStatus(Orders.REFUND);
         }
         // 更新订单状态
